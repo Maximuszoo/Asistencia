@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistema de Asistencia - Psicólogos Sociales</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <h1>🆘 Sistema de Asistencia</h1>
+            <p>Red de Psicólogos Sociales</p>
+            <nav class="main-nav">
+                <a href="index.html" class="active">🏠 Inicio</a>
+                <a href="consejos.html">💚 Consejos</a>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container">
+        <!-- Botón de Asistencia de Emergencia -->
+        <section class="emergency-section">
+            <button id="btnAsistencia" class="btn-emergency">
+                ⚠️ SOLICITAR ASISTENCIA
+            </button>
+            <p class="emergency-text">Presiona el botón para contactar a los profesionales más cercanos</p>
+        </section>
+
+        <!-- Mapa -->
+        <section class="map-section">
+            <h2>📍 Mapa de Profesionales</h2>
+            <div id="map"></div>
+        </section>
+
+        <!-- Filtros -->
+        <section class="filters-section">
+            <h3>Filtrar por:</h3>
+            <div class="filters">
+                <select id="filterZona">
+                    <option value="">Todas las zonas</option>
+                    <option value="norte">Zona Norte</option>
+                    <option value="sur">Zona Sur</option>
+                    <option value="centro">Zona Centro</option>
+                    <option value="este">Zona Este</option>
+                    <option value="oeste">Zona Oeste</option>
+                </select>
+                <input type="text" id="searchName" placeholder="Buscar por nombre...">
+            </div>
+        </section>
+
+        <!-- Lista de Profesionales -->
+        <section class="professionals-section">
+            <h2>👥 Profesionales Disponibles</h2>
+            <div id="professionalsList" class="professionals-grid">
+                <!-- Los profesionales se cargarán con JavaScript -->
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2025 Sistema de Asistencia - Psicólogos Sociales</p>
+            <p>Servicio de emergencia disponible 24/7</p>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>

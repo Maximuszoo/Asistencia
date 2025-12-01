@@ -1,0 +1,447 @@
+/* Estilos específicos para la página de consejos */
+
+/* Navegación */
+.main-nav {
+    margin-top: 1.5rem;
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.main-nav a {
+    color: white;
+    text-decoration: none;
+    padding: 0.5rem 1.5rem;
+    border-radius: 25px;
+    background: rgba(255, 255, 255, 0.2);
+    transition: all 0.3s ease;
+    font-weight: 500;
+}
+
+.main-nav a:hover {
+    background: rgba(255, 255, 255, 0.3);
+    transform: translateY(-2px);
+}
+
+.main-nav a.active {
+    background: rgba(255, 255, 255, 0.9);
+    color: #667eea;
+}
+
+/* Introducción */
+.intro-section {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    padding: 3rem;
+    border-radius: 15px;
+    margin-bottom: 3rem;
+    box-shadow: 0 10px 30px rgba(102, 126, 234, 0.3);
+}
+
+.intro-content h2 {
+    font-size: 2rem;
+    margin-bottom: 1rem;
+}
+
+.intro-content p {
+    font-size: 1.2rem;
+    line-height: 1.8;
+    opacity: 0.95;
+}
+
+/* Sección de consejos diarios */
+.tips-section {
+    margin-bottom: 4rem;
+}
+
+.tips-section h2 {
+    color: #667eea;
+    font-size: 2rem;
+    margin-bottom: 2rem;
+    text-align: center;
+}
+
+.tips-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 2rem;
+}
+
+.tip-card {
+    background: white;
+    padding: 2rem;
+    border-radius: 15px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.tip-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+}
+
+.tip-icon {
+    font-size: 3rem;
+    text-align: center;
+    margin-bottom: 1rem;
+}
+
+.tip-card h3 {
+    color: #764ba2;
+    font-size: 1.4rem;
+    margin-bottom: 1rem;
+    text-align: center;
+}
+
+.tip-card p {
+    color: #555;
+    margin-bottom: 1rem;
+    line-height: 1.6;
+}
+
+.tip-card ul {
+    list-style: none;
+    padding: 0;
+}
+
+.tip-card ul li {
+    padding: 0.5rem 0;
+    padding-left: 1.5rem;
+    position: relative;
+    color: #666;
+}
+
+.tip-card ul li:before {
+    content: "✓";
+    position: absolute;
+    left: 0;
+    color: #667eea;
+    font-weight: bold;
+}
+
+/* Sección Social */
+.social-section {
+    background: #f8f9ff;
+    padding: 3rem;
+    border-radius: 15px;
+    margin-bottom: 4rem;
+}
+
+.social-section h2 {
+    color: #667eea;
+    font-size: 2rem;
+    margin-bottom: 2rem;
+    text-align: center;
+}
+
+.social-content {
+    display: grid;
+    gap: 2rem;
+    max-width: 900px;
+    margin: 0 auto;
+}
+
+.social-card {
+    background: white;
+    padding: 2rem;
+    border-radius: 12px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+}
+
+.social-card h3 {
+    color: #764ba2;
+    font-size: 1.4rem;
+    margin-bottom: 1rem;
+}
+
+.social-card p {
+    color: #555;
+    margin-bottom: 1.5rem;
+    line-height: 1.6;
+}
+
+.social-tips {
+    display: flex;
+    flex-direction: column;
+    gap: 0.8rem;
+}
+
+.social-tip {
+    background: #e8eaff;
+    padding: 0.8rem 1.2rem;
+    border-radius: 8px;
+    color: #4a5568;
+    border-left: 4px solid #667eea;
+}
+
+/* Sección de Estrés */
+.stress-section {
+    margin-bottom: 4rem;
+}
+
+.stress-section h2 {
+    color: #667eea;
+    font-size: 2rem;
+    margin-bottom: 2rem;
+    text-align: center;
+}
+
+.stress-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2rem;
+}
+
+.stress-card {
+    background: white;
+    padding: 2rem;
+    border-radius: 12px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    border-top: 4px solid #667eea;
+}
+
+.stress-card h3 {
+    color: #764ba2;
+    font-size: 1.3rem;
+    margin-bottom: 1.5rem;
+}
+
+.technique p {
+    color: #555;
+    margin-bottom: 1rem;
+}
+
+.technique ol,
+.technique ul {
+    color: #666;
+    line-height: 1.8;
+    padding-left: 1.5rem;
+}
+
+.technique li {
+    margin-bottom: 0.5rem;
+}
+
+/* Sección de Advertencias */
+.warning-section {
+    background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+    color: white;
+    padding: 3rem;
+    border-radius: 15px;
+    margin-bottom: 4rem;
+}
+
+.warning-section h2 {
+    color: white;
+    font-size: 2rem;
+    margin-bottom: 1.5rem;
+    text-align: center;
+}
+
+.warning-intro {
+    font-size: 1.2rem;
+    text-align: center;
+    margin-bottom: 2rem;
+    opacity: 0.95;
+}
+
+.warning-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+}
+
+.warning-item {
+    background: rgba(255, 255, 255, 0.15);
+    padding: 1.5rem;
+    border-radius: 10px;
+    text-align: center;
+    backdrop-filter: blur(10px);
+}
+
+.warning-icon {
+    font-size: 2.5rem;
+    display: block;
+    margin-bottom: 1rem;
+}
+
+.warning-item p {
+    font-size: 1rem;
+    line-height: 1.6;
+}
+
+.help-cta {
+    text-align: center;
+    margin-top: 3rem;
+    padding-top: 2rem;
+    border-top: 2px solid rgba(255, 255, 255, 0.3);
+}
+
+.help-cta p {
+    font-size: 1.3rem;
+    margin-bottom: 1.5rem;
+}
+
+.btn-help {
+    display: inline-block;
+    background: white;
+    color: #f5576c;
+    padding: 1rem 2.5rem;
+    border-radius: 50px;
+    text-decoration: none;
+    font-weight: bold;
+    font-size: 1.2rem;
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
+    transition: all 0.3s ease;
+}
+
+.btn-help:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+}
+
+/* Recursos */
+.resources-section {
+    margin-bottom: 4rem;
+}
+
+.resources-section h2 {
+    color: #667eea;
+    font-size: 2rem;
+    margin-bottom: 2rem;
+    text-align: center;
+}
+
+.resources-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 2rem;
+}
+
+.resource-card {
+    background: white;
+    padding: 2rem;
+    border-radius: 12px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    border-left: 4px solid #764ba2;
+}
+
+.resource-card h3 {
+    color: #764ba2;
+    font-size: 1.3rem;
+    margin-bottom: 1.5rem;
+}
+
+.resource-card ul {
+    list-style: none;
+    padding: 0;
+}
+
+.resource-card ul li {
+    padding: 0.6rem 0;
+    color: #555;
+    line-height: 1.6;
+}
+
+.resource-card ul li strong {
+    color: #667eea;
+}
+
+/* Cita */
+.quote-section {
+    text-align: center;
+    padding: 3rem;
+    background: linear-gradient(135deg, #e0e7ff 0%, #f3e8ff 100%);
+    border-radius: 15px;
+    margin-bottom: 3rem;
+}
+
+.quote-section blockquote {
+    font-size: 1.5rem;
+    font-style: italic;
+    color: #4a5568;
+    margin: 0;
+    line-height: 1.8;
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.quote-section cite {
+    display: block;
+    margin-top: 1.5rem;
+    font-size: 1.1rem;
+    color: #764ba2;
+    font-weight: 600;
+}
+
+/* Footer */
+.footer-nav {
+    margin-top: 1rem;
+    display: flex;
+    gap: 1.5rem;
+    justify-content: center;
+}
+
+.footer-nav a {
+    color: rgba(255, 255, 255, 0.8);
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+.footer-nav a:hover {
+    color: white;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .intro-section {
+        padding: 2rem;
+    }
+
+    .intro-content h2 {
+        font-size: 1.5rem;
+    }
+
+    .intro-content p {
+        font-size: 1rem;
+    }
+
+    .tips-grid,
+    .stress-grid,
+    .resources-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .social-section {
+        padding: 2rem 1.5rem;
+    }
+
+    .warning-section {
+        padding: 2rem;
+    }
+
+    .quote-section blockquote {
+        font-size: 1.2rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .main-nav {
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+
+    .main-nav a {
+        width: 100%;
+        text-align: center;
+    }
+
+    .tip-card,
+    .social-card,
+    .stress-card,
+    .resource-card {
+        padding: 1.5rem;
+    }
+}
