@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Panel Administrativo - Sistema de Asistencia</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        .admin-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .admin-actions {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+
+        .btn-logout {
+            background: #f5576c;
+            color: white;
+            padding: 0.6rem 1.5rem;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: 600;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .btn-logout:hover {
+            background: #d9455a;
+        }
+
+        .admin-welcome {
+            background: white;
+            padding: 2rem;
+            border-radius: 10px;
+            margin-bottom: 2rem;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        .admin-welcome h2 {
+            color: #667eea;
+            margin-bottom: 0.5rem;
+        }
+
+        .admin-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+
+        .admin-card {
+            background: white;
+            padding: 2rem;
+            border-radius: 12px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            text-align: center;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            cursor: pointer;
+            text-decoration: none;
+            color: inherit;
+            display: block;
+        }
+
+        .admin-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+        }
+
+        .admin-card-icon {
+            font-size: 3.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .admin-card h3 {
+            color: #667eea;
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .admin-card p {
+            color: #666;
+            line-height: 1.6;
+        }
+
+        .professionals-table {
+            background: white;
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            overflow-x: auto;
+        }
+
+        .professionals-table h3 {
+            color: #667eea;
+            margin-bottom: 1.5rem;
+            font-size: 1.5rem;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        table th,
+        table td {
+            padding: 1rem;
+            text-align: left;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        table th {
+            background: #f8f9ff;
+            color: #667eea;
+            font-weight: 600;
+        }
+
+        table tr:hover {
+            background: #f8f9ff;
+        }
+
+        .btn-edit {
+            background: #667eea;
+            color: white;
+            padding: 0.5rem 1rem;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 0.9rem;
+        }
+
+        .btn-edit:hover {
+            background: #5568d3;
+        }
+
+        .status-badge {
+            padding: 0.3rem 0.8rem;
+            border-radius: 15px;
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+
+        .status-disponible {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        @media (max-width: 768px) {
+            .admin-header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .admin-cards {
+                grid-template-columns: 1fr;
+            }
+
+            table {
+                font-size: 0.9rem;
+            }
+
+            table th,
+            table td {
+                padding: 0.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div class="admin-header">
+                <div>
+                    <h1>⚙️ Panel Administrativo</h1>
+                    <p>Gestión de profesionales</p>
+                </div>
+                <div class="admin-actions">
+                    <a href="index.html" class="btn-edit">🏠 Ver sitio</a>
+                    <button onclick="handleLogout()" class="btn-logout">🚪 Cerrar sesión</button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main class="container">
+        <div class="admin-welcome">
+            <h2>¡Bienvenido, Administrador!</h2>
+            <p>Desde aquí puedes gestionar todos los profesionales del sistema</p>
+        </div>
+
+        <div class="admin-cards">
+            <a href="formulario-profesional.html?action=new" class="admin-card">
+                <div class="admin-card-icon">➕</div>
+                <h3>Agregar Profesional</h3>
+                <p>Registra un nuevo psicólogo social en el sistema</p>
+            </a>
+
+            <div class="admin-card" onclick="scrollToTable()">
+                <div class="admin-card-icon">📋</div>
+                <h3>Lista de Profesionales</h3>
+                <p>Ver y editar profesionales existentes</p>
+            </div>
+
+            <a href="index.html" class="admin-card">
+                <div class="admin-card-icon">🗺️</div>
+                <h3>Ver Mapa</h3>
+                <p>Visualizar ubicaciones en el mapa público</p>
+            </a>
+        </div>
+
+        <div class="professionals-table" id="professionalsTable">
+            <h3>📋 Profesionales Registrados</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Nombre</th>
+                        <th>Especialidad</th>
+                        <th>Zona</th>
+                        <th>Teléfono</th>
+                        <th>Estado</th>
+                        <th>Acción</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>1</td>
+                        <td>Dra. María González</td>
+                        <td>Psicología Social Comunitaria</td>
+                        <td>Norte</td>
+                        <td>+54 911 2345-6789</td>
+                        <td><span class="status-badge status-disponible">Disponible</span></td>
+                        <td><a href="formulario-profesional.html?action=edit&id=1" class="btn-edit">✏️ Editar</a></td>
+                    </tr>
+                    <tr>
+                        <td>2</td>
+                        <td>Lic. Carlos Rodríguez</td>
+                        <td>Intervención en Crisis</td>
+                        <td>Sur</td>
+                        <td>+54 911 9876-5432</td>
+                        <td><span class="status-badge status-disponible">Disponible</span></td>
+                        <td><a href="formulario-profesional.html?action=edit&id=2" class="btn-edit">✏️ Editar</a></td>
+                    </tr>
+                    <tr>
+                        <td>3</td>
+                        <td>Lic. Ana Martínez</td>
+                        <td>Psicología Grupal</td>
+                        <td>Centro</td>
+                        <td>+54 911 4567-8901</td>
+                        <td><span class="status-badge status-disponible">Disponible</span></td>
+                        <td><a href="formulario-profesional.html?action=edit&id=3" class="btn-edit">✏️ Editar</a></td>
+                    </tr>
+                    <tr>
+                        <td>4</td>
+                        <td>Dr. Jorge Fernández</td>
+                        <td>Psicología Organizacional</td>
+                        <td>Este</td>
+                        <td>+54 911 5678-9012</td>
+                        <td><span class="status-badge status-disponible">Disponible</span></td>
+                        <td><a href="formulario-profesional.html?action=edit&id=4" class="btn-edit">✏️ Editar</a></td>
+                    </tr>
+                    <tr>
+                        <td>5</td>
+                        <td>Lic. Laura Sánchez</td>
+                        <td>Asistencia Comunitaria</td>
+                        <td>Oeste</td>
+                        <td>+54 911 6789-0123</td>
+                        <td><span class="status-badge status-disponible">Disponible</span></td>
+                        <td><a href="formulario-profesional.html?action=edit&id=5" class="btn-edit">✏️ Editar</a></td>
+                    </tr>
+                    <tr>
+                        <td>6</td>
+                        <td>Lic. Miguel Torres</td>
+                        <td>Psicología de Emergencias</td>
+                        <td>Norte</td>
+                        <td>+54 911 7890-1234</td>
+                        <td><span class="status-badge status-disponible">Disponible</span></td>
+                        <td><a href="formulario-profesional.html?action=edit&id=6" class="btn-edit">✏️ Editar</a></td>
+                    </tr>
+                    <tr>
+                        <td>7</td>
+                        <td>Dra. Patricia López</td>
+                        <td>Salud Mental Comunitaria</td>
+                        <td>Sur</td>
+                        <td>+54 911 8901-2345</td>
+                        <td><span class="status-badge status-disponible">Disponible</span></td>
+                        <td><a href="formulario-profesional.html?action=edit&id=7" class="btn-edit">✏️ Editar</a></td>
+                    </tr>
+                    <tr>
+                        <td>8</td>
+                        <td>Lic. Roberto Díaz</td>
+                        <td>Psicología Social</td>
+                        <td>Centro</td>
+                        <td>+54 911 9012-3456</td>
+                        <td><span class="status-badge status-disponible">Disponible</span></td>
+                        <td><a href="formulario-profesional.html?action=edit&id=8" class="btn-edit">✏️ Editar</a></td>
+                    </tr>
+                    <tr>
+                        <td>9</td>
+                        <td>Lic. Silvia Ruiz</td>
+                        <td>Intervención Social</td>
+                        <td>Este</td>
+                        <td>+54 911 0123-4567</td>
+                        <td><span class="status-badge status-disponible">Disponible</span></td>
+                        <td><a href="formulario-profesional.html?action=edit&id=9" class="btn-edit">✏️ Editar</a></td>
+                    </tr>
+                    <tr>
+                        <td>10</td>
+                        <td>Dr. Eduardo Castro</td>
+                        <td>Psicología Comunitaria</td>
+                        <td>Oeste</td>
+                        <td>+54 911 1234-5678</td>
+                        <td><span class="status-badge status-disponible">Disponible</span></td>
+                        <td><a href="formulario-profesional.html?action=edit&id=10" class="btn-edit">✏️ Editar</a></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2025 Sistema de Asistencia - Psicólogos Sociales</p>
+            <p>Panel administrativo - Acceso restringido</p>
+        </div>
+    </footer>
+
+    <script>
+        // Verificar si está logueado
+        if (sessionStorage.getItem('admin_logged_in') !== 'true') {
+            window.location.href = 'login.html';
+        }
+
+        function handleLogout() {
+            if (confirm('¿Estás seguro que deseas cerrar sesión?')) {
+                sessionStorage.removeItem('admin_logged_in');
+                window.location.href = 'login.html';
+            }
+        }
+
+        function scrollToTable() {
+            document.getElementById('professionalsTable').scrollIntoView({ 
+                behavior: 'smooth', 
+                block: 'start' 
+            });
+        }
+    </script>
+</body>
+</html>

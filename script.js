@@ -425,12 +425,16 @@ document.addEventListener('DOMContentLoaded', () => {
     // Botón de asistencia
     document.getElementById('btnAsistencia').addEventListener('click', () => {
         const confirmacion = confirm(
-            '¿Necesitas asistencia inmediata?\n\n' +
-            'Se enviará una alerta a los profesionales disponibles y se mostrará tu ubicación.'
+            '⚠️ AVISO IMPORTANTE\n\n' +
+            '• Tu ubicación será compartida con los psicólogos sociales disponibles\n' +
+            '• Se enviará tu información de contacto para que puedan asistirte\n' +
+            '• Toda la información es confidencial\n\n' +
+            '¿Deseas continuar con la solicitud de asistencia?'
         );
 
         if (confirmacion) {
-            getUserLocation();
+            // Redirigir al formulario de asistencia
+            window.location.href = 'solicitar-asistencia.html';
         }
     });
 

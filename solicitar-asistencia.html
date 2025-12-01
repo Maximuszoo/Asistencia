@@ -1,0 +1,520 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Solicitud de Asistencia - Sistema de Asistencia</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <style>
+        .assistance-container {
+            max-width: 700px;
+            margin: 2rem auto;
+            background: white;
+            padding: 2.5rem;
+            border-radius: 15px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+        }
+
+        .assistance-header {
+            text-align: center;
+            margin-bottom: 2rem;
+            padding-bottom: 1.5rem;
+            border-bottom: 2px solid #e0e0e0;
+        }
+
+        .assistance-icon {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+        }
+
+        .assistance-header h2 {
+            color: #f5576c;
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .assistance-header p {
+            color: #666;
+            font-size: 1.1rem;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            color: #333;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .form-group .required {
+            color: #f5576c;
+        }
+
+        .form-group input,
+        .form-group textarea {
+            width: 100%;
+            padding: 0.8rem;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-family: inherit;
+            transition: border-color 0.3s ease;
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: #f5576c;
+        }
+
+        .form-group textarea {
+            resize: vertical;
+            min-height: 80px;
+        }
+
+        .location-section {
+            background: #fff5f7;
+            padding: 1.5rem;
+            border-radius: 10px;
+            margin-bottom: 1.5rem;
+            border: 2px solid #fdd;
+        }
+
+        .location-section h3 {
+            color: #f5576c;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .location-status {
+            background: white;
+            padding: 1rem;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+            font-size: 0.95rem;
+        }
+
+        .location-status strong {
+            color: #f5576c;
+        }
+
+        #assistanceMap {
+            width: 100%;
+            height: 300px;
+            border-radius: 10px;
+            border: 2px solid #e0e0e0;
+            margin-top: 1rem;
+        }
+
+        .btn-get-location {
+            background: #667eea;
+            color: white;
+            padding: 0.8rem 1.5rem;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: background 0.3s ease;
+        }
+
+        .btn-get-location:hover {
+            background: #5568d3;
+        }
+
+        .btn-get-location:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+        }
+
+        .info-box {
+            background: #e8f4fd;
+            border-left: 4px solid #2196F3;
+            padding: 1rem;
+            border-radius: 5px;
+            margin-bottom: 1.5rem;
+        }
+
+        .info-box p {
+            margin: 0.5rem 0;
+            color: #1976D2;
+            font-size: 0.95rem;
+        }
+
+        .btn-send-assistance {
+            width: 100%;
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            color: white;
+            padding: 1.2rem;
+            border: none;
+            border-radius: 10px;
+            font-size: 1.2rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            margin-top: 1rem;
+        }
+
+        .btn-send-assistance:hover:not(:disabled) {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(245, 87, 108, 0.4);
+        }
+
+        .btn-send-assistance:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .loading-spinner {
+            display: none;
+            text-align: center;
+            padding: 1rem;
+        }
+
+        .loading-spinner.show {
+            display: block;
+        }
+
+        .loading-spinner::after {
+            content: "";
+            display: inline-block;
+            width: 40px;
+            height: 40px;
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #f5576c;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .btn-back {
+            display: inline-block;
+            color: #667eea;
+            text-decoration: none;
+            margin-bottom: 1rem;
+            font-weight: 600;
+        }
+
+        .btn-back:hover {
+            text-decoration: underline;
+        }
+
+        @media (max-width: 768px) {
+            .assistance-container {
+                padding: 1.5rem;
+                margin: 1rem;
+            }
+
+            .assistance-header h2 {
+                font-size: 1.5rem;
+            }
+
+            #assistanceMap {
+                height: 250px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <h1>🆘 Solicitud de Asistencia</h1>
+            <p>Estamos aquí para ayudarte</p>
+        </div>
+    </header>
+
+    <main class="container">
+        <a href="index.html" class="btn-back">← Volver</a>
+        
+        <div class="assistance-container">
+            <div class="assistance-header">
+                <div class="assistance-icon">🚨</div>
+                <h2>Solicitar Asistencia de Emergencia</h2>
+                <p>Completa los datos para contactar con los profesionales</p>
+            </div>
+
+            <div class="info-box">
+                <p><strong>ℹ️ Información importante:</strong></p>
+                <p>• Tu ubicación será compartida con los psicólogos sociales disponibles</p>
+                <p>• Recibirás asistencia del profesional más cercano a tu ubicación</p>
+                <p>• Toda la información es confidencial y segura</p>
+            </div>
+
+            <form id="assistanceForm">
+                <div class="form-group">
+                    <label for="personName">Tu nombre <span class="required">*</span></label>
+                    <input 
+                        type="text" 
+                        id="personName" 
+                        name="personName" 
+                        required 
+                        placeholder="¿Cómo te llamas?"
+                    >
+                </div>
+
+                <div class="form-group">
+                    <label for="personPhone">Tu número de WhatsApp <span class="required">*</span></label>
+                    <input 
+                        type="tel" 
+                        id="personPhone" 
+                        name="personPhone" 
+                        required 
+                        placeholder="+54 911 1234-5678"
+                    >
+                </div>
+
+                <div class="location-section">
+                    <h3>📍 Tu ubicación actual</h3>
+                    
+                    <button type="button" id="btnGetLocation" class="btn-get-location">
+                        📍 Obtener mi ubicación
+                    </button>
+
+                    <div class="loading-spinner" id="loadingLocation"></div>
+
+                    <div class="location-status" id="locationStatus" style="display: none;">
+                        <p><strong>Ubicación obtenida:</strong></p>
+                        <p id="coordsDisplay"></p>
+                    </div>
+
+                    <div id="assistanceMap" style="display: none;"></div>
+
+                    <input type="hidden" id="userLat" name="userLat">
+                    <input type="hidden" id="userLng" name="userLng">
+                </div>
+
+                <div class="form-group">
+                    <label for="locationAddress">Dirección o referencia de tu ubicación <span class="required">*</span></label>
+                    <textarea 
+                        id="locationAddress" 
+                        name="locationAddress" 
+                        required 
+                        placeholder="Ej: Av. Corrientes 3000, cerca del shopping, edificio blanco"
+                    ></textarea>
+                    <small style="color: #666;">Proporciona referencias para que los profesionales te encuentren fácilmente</small>
+                </div>
+
+                <div class="form-group">
+                    <label for="additionalInfo">Información adicional (opcional)</label>
+                    <textarea 
+                        id="additionalInfo" 
+                        name="additionalInfo" 
+                        placeholder="¿Hay algo más que los profesionales deban saber?"
+                    ></textarea>
+                </div>
+
+                <button type="submit" id="btnSendAssistance" class="btn-send-assistance" disabled>
+                    📲 Enviar Solicitud de Asistencia
+                </button>
+            </form>
+        </div>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2025 Sistema de Asistencia - Psicólogos Sociales</p>
+            <p>Servicio de emergencia disponible 24/7</p>
+        </div>
+    </footer>
+
+    <script>
+        let map;
+        let userMarker;
+        let userLocation = null;
+
+        // Números de los profesionales (simulado - en producción vendrían del backend)
+        const professionalNumbers = [
+            '+5491123456789',  // Dra. María González
+            '+5491198765432',  // Lic. Carlos Rodríguez
+            '+5491145678901',  // Lic. Ana Martínez
+            '+5491156789012',  // Dr. Jorge Fernández
+            '+5491167890123',  // Lic. Laura Sánchez
+            '+5491178901234',  // Lic. Miguel Torres
+            '+5491189012345',  // Dra. Patricia López
+            '+5491190123456',  // Lic. Roberto Díaz
+            '+5491101234567',  // Lic. Silvia Ruiz
+            '+5491112345678'   // Dr. Eduardo Castro
+        ];
+
+        // Obtener ubicación del usuario
+        document.getElementById('btnGetLocation').addEventListener('click', function() {
+            const btn = this;
+            const loadingSpinner = document.getElementById('loadingLocation');
+            
+            if (!navigator.geolocation) {
+                alert('Tu navegador no soporta geolocalización.');
+                return;
+            }
+
+            btn.disabled = true;
+            btn.textContent = '📍 Obteniendo ubicación...';
+            loadingSpinner.classList.add('show');
+
+            const options = {
+                enableHighAccuracy: true,
+                timeout: 10000,
+                maximumAge: 0
+            };
+
+            navigator.geolocation.getCurrentPosition(
+                (position) => {
+                    userLocation = {
+                        lat: position.coords.latitude,
+                        lng: position.coords.longitude
+                    };
+
+                    // Guardar coordenadas
+                    document.getElementById('userLat').value = userLocation.lat;
+                    document.getElementById('userLng').value = userLocation.lng;
+
+                    // Mostrar coordenadas
+                    document.getElementById('coordsDisplay').innerHTML = 
+                        `Latitud: ${userLocation.lat.toFixed(6)}<br>Longitud: ${userLocation.lng.toFixed(6)}`;
+                    document.getElementById('locationStatus').style.display = 'block';
+
+                    // Inicializar mapa
+                    initMap(userLocation.lat, userLocation.lng);
+
+                    // Habilitar botón de envío
+                    document.getElementById('btnSendAssistance').disabled = false;
+
+                    btn.textContent = '✅ Ubicación obtenida';
+                    btn.disabled = true;
+                    loadingSpinner.classList.remove('show');
+                },
+                (error) => {
+                    loadingSpinner.classList.remove('show');
+                    btn.disabled = false;
+                    btn.textContent = '📍 Obtener mi ubicación';
+
+                    let errorMsg = 'No se pudo obtener tu ubicación.\n\n';
+                    
+                    switch(error.code) {
+                        case error.PERMISSION_DENIED:
+                            errorMsg += 'Por favor, permite el acceso a tu ubicación en la configuración del navegador.';
+                            break;
+                        case error.POSITION_UNAVAILABLE:
+                            errorMsg += 'Tu ubicación no está disponible. Verifica que el GPS esté activado.';
+                            break;
+                        case error.TIMEOUT:
+                            errorMsg += 'Tiempo de espera agotado. Intenta nuevamente.';
+                            break;
+                        default:
+                            errorMsg += 'Error desconocido. Intenta nuevamente.';
+                    }
+                    
+                    alert(errorMsg);
+                }
+            );
+        });
+
+        // Inicializar mapa
+        function initMap(lat, lng) {
+            const mapContainer = document.getElementById('assistanceMap');
+            mapContainer.style.display = 'block';
+
+            if (map) {
+                map.remove();
+            }
+
+            map = L.map('assistanceMap').setView([lat, lng], 15);
+            
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                attribution: '© OpenStreetMap contributors',
+                maxZoom: 19
+            }).addTo(map);
+
+            // Crear icono para el usuario
+            const blueIcon = L.icon({
+                iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-blue.png',
+                shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/images/marker-shadow.png',
+                iconSize: [25, 41],
+                iconAnchor: [12, 41],
+                popupAnchor: [1, -34],
+                shadowSize: [41, 41]
+            });
+
+            userMarker = L.marker([lat, lng], {
+                icon: blueIcon,
+                draggable: true
+            }).addTo(map);
+
+            userMarker.bindPopup('<strong>📍 Tu ubicación</strong>').openPopup();
+
+            // Actualizar coordenadas si mueven el marcador
+            userMarker.on('dragend', function(e) {
+                const pos = userMarker.getLatLng();
+                userLocation = { lat: pos.lat, lng: pos.lng };
+                document.getElementById('userLat').value = pos.lat;
+                document.getElementById('userLng').value = pos.lng;
+                document.getElementById('coordsDisplay').innerHTML = 
+                    `Latitud: ${pos.lat.toFixed(6)}<br>Longitud: ${pos.lng.toFixed(6)}`;
+            });
+        }
+
+        // Manejar envío del formulario
+        document.getElementById('assistanceForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            const name = document.getElementById('personName').value;
+            const phone = document.getElementById('personPhone').value;
+            const address = document.getElementById('locationAddress').value;
+            const additionalInfo = document.getElementById('additionalInfo').value;
+            const lat = document.getElementById('userLat').value;
+            const lng = document.getElementById('userLng').value;
+
+            if (!lat || !lng) {
+                alert('Por favor, obtén tu ubicación antes de enviar la solicitud.');
+                return;
+            }
+
+            // Crear mensaje para WhatsApp
+            const message = `🆘 *SOLICITUD DE ASISTENCIA DE EMERGENCIA*\n\n` +
+                          `👤 *Nombre:* ${name}\n` +
+                          `📱 *Teléfono:* ${phone}\n\n` +
+                          `📍 *Ubicación:*\n${address}\n\n` +
+                          `🗺️ *Coordenadas GPS:*\n` +
+                          `Latitud: ${parseFloat(lat).toFixed(6)}\n` +
+                          `Longitud: ${parseFloat(lng).toFixed(6)}\n` +
+                          `Google Maps: https://www.google.com/maps?q=${lat},${lng}\n\n` +
+                          (additionalInfo ? `📝 *Información adicional:*\n${additionalInfo}\n\n` : '') +
+                          `⏰ *Fecha y hora:* ${new Date().toLocaleString('es-AR')}\n\n` +
+                          `_Mensaje enviado desde el Sistema de Asistencia_`;
+
+            // Codificar mensaje para URL
+            const encodedMessage = encodeURIComponent(message);
+
+            // En una app real, esto se enviaría a un grupo de WhatsApp
+            // Por ahora, lo enviamos al primer profesional como ejemplo
+            const whatsappURL = `https://wa.me/${professionalNumbers[0].replace(/[\s\-\+]/g, '')}?text=${encodedMessage}`;
+
+            // Mostrar confirmación
+            if (confirm('¿Estás seguro que deseas enviar la solicitud de asistencia?\n\nSe enviará tu información a los profesionales disponibles.')) {
+                // Abrir WhatsApp
+                window.open(whatsappURL, '_blank');
+
+                // Mostrar mensaje de éxito
+                alert('✅ Solicitud enviada correctamente.\n\nUn profesional se pondrá en contacto contigo lo antes posible.\n\nMantén tu teléfono cerca.');
+
+                // Opcional: redirigir después de un momento
+                setTimeout(() => {
+                    window.location.href = 'index.html';
+                }, 2000);
+            }
+        });
+    </script>
+</body>
+</html>
