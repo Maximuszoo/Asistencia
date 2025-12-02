@@ -6,6 +6,7 @@
     <title>Consejos de Salud Mental - Sistema de Asistencia</title>
     <link rel="stylesheet" href="styles.css">
     <link rel="stylesheet" href="consejos-styles.css">
+    <link rel="stylesheet" href="pixel-transition.css">
 </head>
 <body>
     <header>
@@ -248,6 +249,27 @@
                 <cite>- Noam Shpancer</cite>
             </blockquote>
         </section>
+
+        <!-- Pixel Transition Cat -->
+        <section style="text-align: center; margin: 3rem 0;">
+            <h3 style="color: #667eea; margin-bottom: 1rem;">🐱 Momento de relajación</h3>
+            <p style="color: #666; margin-bottom: 1rem;">Pasa el mouse (o toca en móvil) para una sorpresa</p>
+            <div class="pixelated-image-card" id="pixelCard" tabindex="0">
+                <div style="padding-top: 100%;"></div>
+                <div class="pixelated-image-card__default">
+                    <img
+                        src="https://upload.wikimedia.org/wikipedia/commons/thumb/3/3a/Cat03.jpg/1200px-Cat03.jpg"
+                        alt="Un lindo gatito"
+                    />
+                </div>
+                <div class="pixelated-image-card__active" id="activeContent">
+                    <div class="pixelated-image-card__meow">
+                        <p>Meow! 😸</p>
+                    </div>
+                </div>
+                <div class="pixelated-image-card__pixels" id="pixelGrid"></div>
+            </div>
+        </section>
     </main>
 
     <footer>
@@ -260,5 +282,104 @@
             </nav>
         </div>
     </footer>
+
+    <script>
+        // Pixel Transition Effect (adaptado de React a vanilla JS)
+        (function() {
+            const pixelCard = document.getElementById('pixelCard');
+            const pixelGrid = document.getElementById('pixelGrid');
+            const activeContent = document.getElementById('activeContent');
+            
+            const gridSize = 12;
+            const pixelColor = '#ffffff';
+            const animationStepDuration = 400; // ms
+            
+            let isActive = false;
+            let animationTimeout = null;
+            
+            // Crear grid de píxeles
+            function createPixelGrid() {
+                pixelGrid.innerHTML = '';
+                
+                for (let row = 0; row < gridSize; row++) {
+                    for (let col = 0; col < gridSize; col++) {
+                        const pixel = document.createElement('div');
+                        pixel.classList.add('pixelated-image-card__pixel');
+                        pixel.style.backgroundColor = pixelColor;
+                        
+                        const size = 100 / gridSize;
+                        pixel.style.width = `${size}%`;
+                        pixel.style.height = `${size}%`;
+                        pixel.style.left = `${col * size}%`;
+                        pixel.style.top = `${row * size}%`;
+                        
+                        pixelGrid.appendChild(pixel);
+                    }
+                }
+            }
+            
+            // Animar píxeles
+            function animatePixels(activate) {
+                if (animationTimeout) clearTimeout(animationTimeout);
+                
+                isActive = activate;
+                const pixels = Array.from(pixelGrid.querySelectorAll('.pixelated-image-card__pixel'));
+                
+                if (!pixels.length) return;
+                
+                // Orden aleatorio
+                const shuffled = pixels.sort(() => Math.random() - 0.5);
+                const delayPerPixel = animationStepDuration / pixels.length;
+                
+                // Mostrar píxeles progresivamente
+                shuffled.forEach((pixel, index) => {
+                    setTimeout(() => {
+                        pixel.style.display = 'block';
+                    }, index * delayPerPixel);
+                });
+                
+                // Cambiar contenido en el medio de la animación
+                setTimeout(() => {
+                    activeContent.style.display = activate ? 'block' : 'none';
+                }, animationStepDuration);
+                
+                // Ocultar píxeles progresivamente
+                const shuffled2 = [...pixels].sort(() => Math.random() - 0.5);
+                shuffled2.forEach((pixel, index) => {
+                    setTimeout(() => {
+                        pixel.style.display = 'none';
+                    }, animationStepDuration + (index * delayPerPixel));
+                });
+            }
+            
+            // Event handlers
+            const isTouchDevice = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
+            
+            if (isTouchDevice) {
+                pixelCard.addEventListener('click', () => {
+                    animatePixels(!isActive);
+                });
+            } else {
+                pixelCard.addEventListener('mouseenter', () => {
+                    if (!isActive) animatePixels(true);
+                });
+                
+                pixelCard.addEventListener('mouseleave', () => {
+                    if (isActive) animatePixels(false);
+                });
+                
+                pixelCard.addEventListener('focus', () => {
+                    if (!isActive) animatePixels(true);
+                });
+                
+                pixelCard.addEventListener('blur', () => {
+                    if (isActive) animatePixels(false);
+                });
+            }
+            
+            // Inicializar
+            createPixelGrid();
+        })();
+    </script>
 </body>
 </html>
