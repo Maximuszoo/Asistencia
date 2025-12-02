@@ -422,20 +422,9 @@ document.addEventListener('DOMContentLoaded', () => {
     // Renderizar profesionales
     renderProfessionals();
 
-    // Botón de asistencia
+    // Botón de asistencia - Redirigir directamente al formulario
     document.getElementById('btnAsistencia').addEventListener('click', () => {
-        const confirmacion = confirm(
-            '⚠️ AVISO IMPORTANTE\n\n' +
-            '• Tu ubicación será compartida con los psicólogos sociales disponibles\n' +
-            '• Se enviará tu información de contacto para que puedan asistirte\n' +
-            '• Toda la información es confidencial\n\n' +
-            '¿Deseas continuar con la solicitud de asistencia?'
-        );
-
-        if (confirmacion) {
-            // Redirigir al formulario de asistencia
-            window.location.href = 'solicitar-asistencia.html';
-        }
+        window.location.href = 'solicitar-asistencia.html';
     });
 
     // Filtros
